@@ -6,10 +6,11 @@
 Rainloop is a simple, modern & fast web-based client. More info on the [official website](http://www.rainloop.net/).
 
 #### Features
-- Based on Alpine 3.3
+- Based on Alpine Linux Edge
 - Latest Rainloop **Community Edition**
 - Contacts (DB) : sqlite, or mysql (server not built-in)
 - nginx + PHP7
+- OPCache (opcocde), APCu (local) installed and configured.
 
 #### Build-time variables
 - **GPG_rainloop** : fingerprint of signing key
@@ -17,6 +18,9 @@ Rainloop is a simple, modern & fast web-based client. More info on the [official
 #### Environment variables
 - **GID** : rainloop group id *(default : 991)*
 - **UID** : rainloop user id *(default : 991)*
+- **UPLOAD_MAX_SIZE** : maximum upload size *(default : 10G)*
+- **APC_SHM_SIZE** : apc memory size *(default : 128M)*
+- **OPCACHE_MEM_SIZE** : opcache memory size in megabytes *(default : 128)*
 
 #### Volumes
 - **/rainloop/data** : data files.

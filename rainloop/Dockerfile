@@ -1,15 +1,21 @@
-FROM alpine:3.4
+FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG GPG_rainloop="3B79 7ECE 694F 3B7B 70F3  11A4 ED7C 49D9 87DA 4591"
 
-ENV UID=991 GID=991
+ENV UID=991 GID=991 \
+    UPLOAD_MAX_SIZE=10G \
+    APC_SHM_SIZE=128M \
+    OPCACHE_MEM_SIZE=128
 
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+ && echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && apk -U add \
     gnupg \
     nginx \
     s6 \
+    libressl \
+    ca-certificates \
     su-exec \
     php7-fpm@commuedge \
     php7-curl@commuedge \
@@ -22,6 +28,8 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     php7-pdo_mysql@commuedge \
     php7-pdo_sqlite@commuedge \
     php7-sqlite3@commuedge \
+    php7-apcu@testing \
+    php7-opcache@commuedge \
  && cd /tmp \
  && wget -q http://repository.rainloop.net/v2/webmail/rainloop-community-latest.zip \
  && wget -q http://repository.rainloop.net/v2/webmail/rainloop-community-latest.zip.asc \
@@ -41,6 +49,8 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf
+COPY opcache.ini /etc/php7/conf.d/00_opcache.ini
+COPY apcu.ini /etc/php7/conf.d/apcu.ini
 COPY s6.d /etc/s6.d
 COPY run.sh /usr/local/bin/run.sh
 
